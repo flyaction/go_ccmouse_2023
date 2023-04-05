@@ -1,24 +1,33 @@
-package main
+package tree
 
 import "fmt"
 
-type treeNode struct {
-	value       int
-	right, left *treeNode
+type TreeNode struct {
+	Value       int
+	Right, Left *TreeNode
 }
 
-func main() {
-	var root treeNode
-	root = treeNode{value: 3}
-	root.left = &treeNode{}
-	root.right = &treeNode{5, nil, nil}
-	root.right.left = new(treeNode)
+func (node TreeNode) Print() {
+	fmt.Print(node.Value, " ")
+}
 
-	nodes := []treeNode{
-		{value: 3},
-		{},
-		{6, nil, &root},
+func (node *TreeNode) SetValue(value int) {
+	if node == nil {
+		fmt.Println("Setting value to nil")
+		return
 	}
-	fmt.Println(nodes)
+	node.Value = value
+}
 
+func (node *TreeNode) Traverse() {
+	if node == nil {
+		return
+	}
+	node.Left.Traverse()
+	node.Print()
+	node.Right.Traverse()
+}
+
+func CreateNode(value int) *TreeNode {
+	return &TreeNode{Value: value}
 }
