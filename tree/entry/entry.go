@@ -7,16 +7,16 @@ import (
 )
 
 func main() {
-	var root tree.TreeNode
-	root = tree.TreeNode{Value: 3}
-	root.Left = &tree.TreeNode{}
-	root.Right = &tree.TreeNode{5, nil, nil}
-	root.Right.Left = new(tree.TreeNode)
+	var root tree.Node
+	root = tree.Node{Value: 3}
+	root.Left = &tree.Node{}
+	root.Right = &tree.Node{5, nil, nil}
+	root.Right.Left = new(tree.Node)
 	root.Left.Right = tree.CreateNode(2)
 	root.Right.Left.SetValue(4)
 	root.Traverse()
 
-	nodes := []tree.TreeNode{
+	nodes := []tree.Node{
 		{Value: 3},
 		{},
 		{6, nil, &root},
@@ -32,7 +32,7 @@ func main() {
 	root2.Print()
 
 	fmt.Println()
-	var root3 *tree.TreeNode
+	var root3 *tree.Node
 	root3.SetValue(300)
 
 }
