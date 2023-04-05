@@ -6,6 +6,22 @@ import (
 	"imooc.com/ccmouse/learngo/tree"
 )
 
+type myTreeMode struct {
+	node *tree.Node
+}
+
+func (myNode *myTreeMode) postOrder() {
+	if myNode == nil || myNode.node == nil {
+		return
+	}
+	left := myTreeMode{myNode.node.Left}
+	left.postOrder()
+	right := myTreeMode{myNode.node.Right}
+	right.postOrder()
+	myNode.node.Print()
+
+}
+
 func main() {
 	var root tree.Node
 	root = tree.Node{Value: 3}
@@ -15,6 +31,11 @@ func main() {
 	root.Left.Right = tree.CreateNode(2)
 	root.Right.Left.SetValue(4)
 	root.Traverse()
+
+	fmt.Println()
+	myRoot := myTreeMode{&root}
+	myRoot.postOrder()
+	fmt.Println()
 
 	nodes := []tree.Node{
 		{Value: 3},
