@@ -1,6 +1,6 @@
 package queue
 
-type Queue []int
+type Queue []interface{}
 
 func (q *Queue) Push(v int) {
 
@@ -11,7 +11,7 @@ func (q *Queue) Push(v int) {
 func (q *Queue) Pop() int {
 	head := (*q)[0]
 	*q = (*q)[1:]
-	return head
+	return head.(int)
 }
 
 func (q *Queue) IsEmpty() bool {

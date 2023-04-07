@@ -22,4 +22,9 @@ func main() {
 
 	fmt.Println(q)
 
+	//q.Push("abc")
+	//q.Push("def")
+	//
+	//fmt.Println(q)
+
 }
