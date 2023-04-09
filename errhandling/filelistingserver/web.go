@@ -47,7 +47,7 @@ func errWrapper(handle appHandler) func(http.ResponseWriter, *http.Request) {
 }
 
 type userError interface {
-	error
+	error // Error()
 	Message() string
 }
 
