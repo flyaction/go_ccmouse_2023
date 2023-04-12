@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -40,19 +41,25 @@ func errUnknown(writer http.ResponseWriter, request *http.Request) error {
 	return errors.New("unknown error")
 }
 
-func TestErrWrapper(t *testing.T) {
+func noError(writer http.ResponseWriter, request *http.Request) error {
+	fmt.Fprintln(writer, "no error")
+	return nil
+}
 
-	tests := []struct {
-		h       appHandler
-		code    int
-		message string
-	}{
-		{errPanic, 500, "Internal Server Error"},
-		{errUserError, 400, "user error"},
-		{errNotFound, 404, "Not Found"},
-		{errNoPermission, 403, "Forbidden"},
-		{errUnknown, 500, "Internal Server Error"},
-	}
+var tests = []struct {
+	h       appHandler
+	code    int
+	message string
+}{
+	{errPanic, 500, "Internal Server Error"},
+	{errUserError, 400, "user error"},
+	{errNotFound, 404, "Not Found"},
+	{errNoPermission, 403, "Forbidden"},
+	{errUnknown, 500, "Internal Server Error"},
+	{noError, 200, "no error"},
+}
+
+func TestErrWrapper(t *testing.T) {
 
 	for _, tt := range tests {
 		f := errWrapper(tt.h)
@@ -60,11 +67,30 @@ func TestErrWrapper(t *testing.T) {
 		request := httptest.NewRequest(http.MethodGet, "http://xingdong365.com", nil)
 		f(response, request)
 
-		b, _ := ioutil.ReadAll(response.Body)
-		body := strings.Trim(string(b), "\n")
-		if response.Code != tt.code || body != tt.message {
-			t.Errorf("expect (%d,%s);"+"get(%d,%s)", tt.code, tt.message, response.Code, body)
-		}
+		verifyResponse(response.Result(), tt.code, tt.message, t)
+
+	}
+
+}
+
+func TestErrorWrapperInServer(t *testing.T) {
+	for _, tt := range tests {
+		f := errWrapper(tt.h)
+		server := httptest.NewServer(http.HandlerFunc(f))
+		response, _ := http.Get(server.URL)
+
+		verifyResponse(response, tt.code, tt.message, t)
+
+	}
+
+}
+
+func verifyResponse(response *http.Response, expectedCode int, expectedMsg string, t *testing.T) {
+
+	b, _ := ioutil.ReadAll(response.Body)
+	body := strings.Trim(string(b), "\n")
+	if response.StatusCode != expectedCode || body != expectedMsg {
+		t.Errorf("expect (%d,%s);"+"get(%d,%s)", expectedCode, expectedMsg, response.StatusCode, body)
 	}
 
 }
