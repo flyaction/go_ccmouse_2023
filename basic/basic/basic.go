@@ -55,10 +55,14 @@ func euler() {
 func triangle() {
 
 	var a, b int = 3, 4
+	fmt.Println(callTriangle(a, b))
+
+}
+
+func callTriangle(a, b int) int {
 	var c int
 	c = int(math.Sqrt(float64(a*a + b*b)))
-	fmt.Println(c)
-
+	return c
 }
 
 func consts() {
