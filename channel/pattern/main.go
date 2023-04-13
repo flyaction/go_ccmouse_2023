@@ -20,19 +20,17 @@ func msgGen(name string) chan string {
 	return c
 }
 
-func fanIn(c1, c2 chan string) chan string {
+func fanIn(chs ...chan string) chan string {
 	c := make(chan string)
-	go func() {
-		for {
-			c <- <-c1
-		}
-	}()
-	go func() {
-		for {
-			c <- <-c2
-		}
-	}()
 
+	for _, ch := range chs {
+		chCopy := ch
+		go func() {
+			for {
+				c <- <-chCopy
+			}
+		}()
+	}
 	return c
 }
 
@@ -56,7 +54,9 @@ func fanInBySelect(c1, c2 chan string) chan string {
 func main() {
 	m1 := msgGen("service1")
 	m2 := msgGen("service2")
-	m := fanInBySelect(m1, m2)
+
+	m := fanIn(m1, m2)
+	//m := fanInBySelect(m1, m2)
 
 	for {
 		fmt.Println(<-m)
