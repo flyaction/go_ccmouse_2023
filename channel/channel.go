@@ -5,18 +5,22 @@ import (
 	"time"
 )
 
-func worker(id int, c chan int) {
+func creatWorker(id int) chan int {
 
-	for {
-		fmt.Printf("Worker %d received %c\n", id, <-c)
-	}
+	c := make(chan int)
+	go func() {
+		for {
+			fmt.Printf("Worker %d received %c\n", id, <-c)
+		}
+	}()
+	return c
 
 }
 func chanDemo() {
 	var channel [10]chan int
 	for i := 0; i < 10; i++ {
-		channel[i] = make(chan int)
-		go worker(i, channel[i])
+		channel[i] = creatWorker(i)
+
 	}
 
 	for i := 0; i < 10; i++ {
