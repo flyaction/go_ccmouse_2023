@@ -36,10 +36,27 @@ func fanIn(c1, c2 chan string) chan string {
 	return c
 }
 
+func fanInBySelect(c1, c2 chan string) chan string {
+	c := make(chan string)
+
+	go func() {
+		for {
+			select {
+			case n := <-c1:
+				c <- n
+			case n := <-c2:
+				c <- n
+			}
+		}
+	}()
+
+	return c
+}
+
 func main() {
 	m1 := msgGen("service1")
 	m2 := msgGen("service2")
-	m := fanIn(m1, m2)
+	m := fanInBySelect(m1, m2)
 
 	for {
 		fmt.Println(<-m)
