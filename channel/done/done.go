@@ -33,13 +33,18 @@ func chanDemo() {
 
 	}
 
-	for i := 0; i < 10; i++ {
-		workers[i].in <- 'a' + i
-		<-workers[i].done
+	for i, worker := range workers {
+		worker.in <- 'a' + i
 	}
-	for i := 0; i < 10; i++ {
-		workers[i].in <- 'A' + i
-		<-workers[i].done
+	for _, worker := range workers {
+		<-worker.done
+	}
+	for i, worker := range workers {
+		worker.in <- 'A' + i
+
+	}
+	for _, worker := range workers {
+		<-worker.done
 	}
 }
 
