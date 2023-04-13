@@ -16,6 +16,9 @@ func msgGen(name string, done chan struct{}) chan string {
 				c <- fmt.Sprintf("service %s : message %d", name, i)
 			case <-done:
 				fmt.Println("cleaning up")
+				time.Sleep(2 * time.Second)
+				fmt.Println("cleaning done")
+				done <- struct{}{}
 				return
 			}
 			i++
@@ -94,5 +97,5 @@ func main() {
 	}
 
 	done <- struct{}{}
-	time.Sleep(time.Second)
+	<-done
 }
