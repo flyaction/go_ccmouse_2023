@@ -24,12 +24,11 @@ func fanIn(chs ...chan string) chan string {
 	c := make(chan string)
 
 	for _, ch := range chs {
-		chCopy := ch
-		go func() {
+		go func(in chan string) {
 			for {
-				c <- <-chCopy
+				c <- <-in // ch == in
 			}
-		}()
+		}(ch)
 	}
 	return c
 }
