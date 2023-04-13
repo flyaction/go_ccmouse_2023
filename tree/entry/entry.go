@@ -65,4 +65,14 @@ func main() {
 	var root3 *tree.Node
 	root3.SetValue(300)
 
+	//channel
+	c := root.TraverseWithChannel()
+	maxNode := 0
+	for node := range c {
+		if node.Value > maxNode {
+			maxNode = node.Value
+		}
+	}
+	fmt.Println("maxNode:", maxNode)
+
 }
