@@ -6,13 +6,18 @@ import (
 	"time"
 )
 
-func msgGen(name string) chan string {
+func msgGen(name string, done chan struct{}) chan string {
 	c := make(chan string)
 	go func() {
 		i := 0
 		for {
-			time.Sleep(time.Duration(rand.Intn(5000)) * time.Millisecond)
-			c <- fmt.Sprintf("service %s : message %d", name, i)
+			select {
+			case <-time.After(time.Duration(rand.Intn(5000)) * time.Millisecond):
+				c <- fmt.Sprintf("service %s : message %d", name, i)
+			case <-done:
+				fmt.Println("cleaning up")
+				return
+			}
 			i++
 		}
 	}()
@@ -69,13 +74,15 @@ func timeoutWait(c chan string, timeout time.Duration) (string, bool) {
 }
 
 func main() {
-	m1 := msgGen("service1")
+
+	done := make(chan struct{})
+	m1 := msgGen("service1", done)
 	//m2 := msgGen("service2")
 
 	//m := fanIn(m1, m2)
 	//m := fanInBySelect(m1, m2)
 
-	for {
+	for i := 0; i < 5; i++ {
 		fmt.Println(<-m1)
 		//if m, ok := nonBlockingWait(m2); ok {
 		if m, ok := timeoutWait(m1, 2*time.Second); ok {
@@ -85,4 +92,7 @@ func main() {
 			//fmt.Println("no message from service2")
 		}
 	}
+
+	done <- struct{}{}
+	time.Sleep(time.Second)
 }
