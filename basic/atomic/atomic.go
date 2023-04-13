@@ -2,16 +2,26 @@ package main
 
 import (
 	"fmt"
+	"sync"
 	"time"
 )
 
-type atomicInt int
+//go run  -race atomic.go
+
+type atomicInt struct {
+	value int
+	lock  sync.Mutex
+}
 
 func (a *atomicInt) increment() {
-	*a++
+	a.lock.Lock()
+	defer a.lock.Unlock()
+	a.value++
 }
 func (a *atomicInt) get() int {
-	return int(*a)
+	a.lock.Lock()
+	defer a.lock.Unlock()
+	return a.value
 }
 
 func main() {
@@ -22,5 +32,5 @@ func main() {
 	}()
 
 	time.Sleep(time.Millisecond)
-	fmt.Println(a)
+	fmt.Println(a.get())
 }
