@@ -20,7 +20,8 @@ type Order struct {
 
 func main() {
 	//marshal()
-	unMarshal()
+	//unMarshal()
+	parseNLP()
 }
 
 func marshal() {
@@ -54,5 +55,29 @@ func unMarshal() {
 	}
 
 	fmt.Printf("%+v\n", o)
+
+}
+
+func parseNLP() {
+	res := `{
+"data":[
+  {
+    "span": "斗鱼",
+    "label": "111",
+    "score": 0.9068
+  },
+ {
+    "span": "虎牙",
+    "label": "222",
+    "score": 0.9068
+  }
+]}`
+	m := make(map[string]interface{})
+	err := json.Unmarshal([]byte(res), &m)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("%+v\n", m)
+	fmt.Printf("%+v\n", m["data"].([]interface{})[1].(map[string]interface{})["span"])
 
 }
