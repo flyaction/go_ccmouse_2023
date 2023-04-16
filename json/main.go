@@ -70,14 +70,26 @@ func parseNLP() {
     "span": "虎牙",
     "label": "222",
     "score": 0.9068
+  },
+{
+    "span": "熊猫",
+    "label": "222",
+    "score": 0.9068
   }
 ]}`
-	m := make(map[string]interface{})
+	//m := make(map[string]interface{})
+
+	m := struct {
+		Data []struct {
+			Span string `json:"span"`
+		} `json:"data"`
+	}{}
+
 	err := json.Unmarshal([]byte(res), &m)
 	if err != nil {
 		panic(err)
 	}
 	fmt.Printf("%+v\n", m)
-	fmt.Printf("%+v\n", m["data"].([]interface{})[1].(map[string]interface{})["span"])
-
+	//fmt.Printf("%+v\n", m["data"].([]interface{})[1].(map[string]interface{})["span"])
+	fmt.Printf("%+v\n", m.Data[2].Span)
 }
