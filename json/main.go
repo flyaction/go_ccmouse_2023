@@ -93,3 +93,5 @@ func parseNLP() {
 	//fmt.Printf("%+v\n", m["data"].([]interface{})[1].(map[string]interface{})["span"])
 	fmt.Printf("%+v\n", m.Data[2].Span)
 }
+
+//如果值是一个结构体，fmt.Printf  %+v 的格式化输出内容将包括结构体的字段名。
