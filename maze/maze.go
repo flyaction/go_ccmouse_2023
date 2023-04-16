@@ -29,6 +29,11 @@ func main() {
 
 	maze := readMaze("maze/maze.in")
 
-	fmt.Println(maze)
+	for _, row := range maze {
+		for _, val := range row {
+			fmt.Printf("%d ", val)
+		}
+		fmt.Println()
+	}
 
 }
