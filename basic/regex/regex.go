@@ -12,9 +12,14 @@ end
 `
 
 func main() {
-	re := regexp.MustCompile("[a-z0-9A-Z]+@[a-z0-9A-Z.]+\\.[a-z0-9A-Z]+")
+	re := regexp.MustCompile("([a-zA-Z0-9]+)@([a-zA-Z0-9.]+)\\.([a-zA-Z0-9]+)")
 
-	math := re.FindAllString(text, -1)
+	//math := re.FindAllString(text, -1)
+	//fmt.Println(re, "\n", math)
 
-	fmt.Println(re, "\n", math)
+	math := re.FindAllStringSubmatch(text, -1)
+	for _, m := range math {
+		fmt.Println(m)
+	}
+
 }
