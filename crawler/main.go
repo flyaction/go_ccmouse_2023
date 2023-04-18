@@ -34,12 +34,7 @@ func printCityList(contents []byte) {
 	matches := re.FindAllSubmatch(contents, -1)
 
 	for _, m := range matches {
-
-		for _, subMatch := range m {
-			fmt.Printf("%s ", subMatch)
-		}
-		fmt.Println()
-
+		fmt.Printf("City:%s,URL:%s\n", m[2], m[1])
 	}
 
 }
