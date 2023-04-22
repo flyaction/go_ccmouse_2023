@@ -4,16 +4,21 @@ import (
 	"fmt"
 	"regexp"
 
-	"imooc.com/ccmouse/learngo/crawler/zhenai/parser"
+	"imooc.com/ccmouse/learngo/crawler/jiaou/parserjiaou"
 
 	"imooc.com/ccmouse/learngo/crawler/engine"
 )
 
 func main() {
 
+	//engine.Run(engine.Request{
+	//	Url:        "https://www.zhenai.com/zhenghun",
+	//	ParserFunc: parser.ParseCityList,
+	//})
+
 	engine.Run(engine.Request{
-		Url:        "https://www.zhenai.com/zhenghun",
-		ParserFunc: parser.ParseCityList,
+		Url:        "https://www.7799520.com/jiaou",
+		ParserFunc: parserjiaou.ParseCityList,
 	})
 
 	//resp, err := http.Get("https://www.zhenai.com/zhenghun")
