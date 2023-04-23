@@ -2,8 +2,6 @@ package engine
 
 import (
 	"log"
-
-	"imooc.com/ccmouse/learngo/crawler/model"
 )
 
 type ConcurrentEngine struct {
@@ -43,15 +41,15 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 		e.Scheduler.Submit(r)
 	}
 
-	profileCount := 0
+	itemCount := 0
 
 	for {
 		result := <-out
 		for _, item := range result.Items {
-			if _, ok := item.(model.Profile); ok {
-				log.Printf("Got profile#%d:%v", profileCount, item)
-				profileCount++
-			}
+			//if _, ok := item.(model.Profile); ok {
+			log.Printf("Got item#%d:%v", itemCount, item)
+			itemCount++
+			//}
 		}
 
 		//URL DEDUP
