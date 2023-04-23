@@ -1,12 +1,9 @@
 package engine
 
-import (
-	"log"
-)
-
 type ConcurrentEngine struct {
 	Scheduler   Scheduler
 	WorkerCount int
+	ItemChan    chan interface{}
 }
 
 type Scheduler interface {
@@ -41,15 +38,13 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 		e.Scheduler.Submit(r)
 	}
 
-	itemCount := 0
-
 	for {
 		result := <-out
 		for _, item := range result.Items {
-			//if _, ok := item.(model.Profile); ok {
-			log.Printf("Got item#%d:%v", itemCount, item)
-			itemCount++
-			//}
+			info := item
+			go func() {
+				e.ItemChan <- info
+			}()
 		}
 
 		//URL DEDUP
@@ -60,7 +55,6 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 				//log.Printf("Duplicate request:"+"%s", request.Url)
 				continue
 			}
-
 			e.Scheduler.Submit(request)
 		}
 	}
