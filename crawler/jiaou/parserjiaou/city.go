@@ -10,11 +10,14 @@ import (
 
 const cityRe = `<a class="name" href="(http://www.7799520.com/user/[0-9]+.html)" target="_blank">([^<]+)</a>`
 
+var (
+	profileRe = regexp.MustCompile(`<a class="name" href="(http://www.7799520.com/user/[0-9]+.html)" target="_blank">([^<]+)</a>`)
+	cityUrlRe = regexp.MustCompile(`<a target="_blank" href="(http://www.7799520.com/jiaou/shandong/[a-z]+)">([^<]+)</a>`)
+)
+
 func ParseCity(contents []byte) engine.ParseResult {
 
-	re := regexp.MustCompile(cityRe)
-
-	matches := re.FindAllSubmatch(contents, -1)
+	matches := profileRe.FindAllSubmatch(contents, -1)
 
 	result := engine.ParseResult{}
 
@@ -29,6 +32,14 @@ func ParseCity(contents []byte) engine.ParseResult {
 			},
 		})
 
+	}
+
+	matches = cityUrlRe.FindAllSubmatch(contents, -1)
+	for _, m := range matches {
+		result.Requests = append(result.Requests, engine.Request{
+			Url:        string(m[1]),
+			ParserFunc: ParseCity,
+		})
 	}
 
 	return result

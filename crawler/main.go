@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"regexp"
 
-	"imooc.com/ccmouse/learngo/crawler/zhenai/parser"
+	"imooc.com/ccmouse/learngo/crawler/jiaou/parserjiaou"
 
 	"imooc.com/ccmouse/learngo/crawler/scheduler"
 
@@ -33,8 +33,8 @@ func main() {
 	//})
 
 	e.Run(engine.Request{
-		Url:        "https://www.zhenai.com/zhenghun/shanghai",
-		ParserFunc: parser.ParseCity,
+		Url:        "https://www.7799520.com/jiaou/shandong",
+		ParserFunc: parserjiaou.ParseCity,
 	})
 
 	//resp, err := http.Get("https://www.zhenai.com/zhenghun")
