@@ -2,6 +2,8 @@ package engine
 
 import (
 	"log"
+
+	"imooc.com/ccmouse/learngo/crawler/model"
 )
 
 type ConcurrentEngine struct {
@@ -34,20 +36,22 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 
 	for _, r := range seeds {
 		if isDuplicate(r.Url) {
-			log.Printf("Duplicate request:"+"%s", r.Url)
+			//log.Printf("Duplicate request:"+"%s", r.Url)
 			continue
 		}
 
 		e.Scheduler.Submit(r)
 	}
 
-	itemCount := 0
+	profileCount := 0
 
 	for {
 		result := <-out
 		for _, item := range result.Items {
-			log.Printf("Got item#%d:%v", itemCount, item)
-			itemCount++
+			if _, ok := item.(model.Profile); ok {
+				log.Printf("Got profile#%d:%v", profileCount, item)
+				profileCount++
+			}
 		}
 
 		//URL DEDUP
@@ -55,7 +59,7 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 		for _, request := range result.Requests {
 
 			if isDuplicate(request.Url) {
-				log.Printf("Duplicate request:"+"%s", request.Url)
+				//log.Printf("Duplicate request:"+"%s", request.Url)
 				continue
 			}
 
