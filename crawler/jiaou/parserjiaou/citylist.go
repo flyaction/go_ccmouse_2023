@@ -16,7 +16,7 @@ func ParseCityList(contents []byte) engine.ParseResult {
 
 	result := engine.ParseResult{}
 
-	limit := 3
+	//limit := 3
 
 	for _, m := range matches {
 
@@ -26,10 +26,10 @@ func ParseCityList(contents []byte) engine.ParseResult {
 			ParserFunc: ParseCity,
 		})
 
-		limit--
-		if limit <= 0 {
-			break
-		}
+		//limit--
+		//if limit <= 0 {
+		//	break
+		//}
 
 	}
 
