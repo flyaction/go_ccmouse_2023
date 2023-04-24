@@ -36,9 +36,9 @@ var carRe = regexp.MustCompile(
 var guessRe = regexp.MustCompile(
 	`<a class="exp-user-name"[^>]*href="(.*album\.zhenai\.com/u/[\d]+)">([^<]+)</a>`)
 var idUrlRe = regexp.MustCompile(
-	`.*album\.zhenai\.com/u/([\d]+)`)
+	`www.7799520.com/user/([\d]+).html`)
 
-func ParseProfile(contents []byte, name string) engine.ParseResult {
+func ParseProfile(contents []byte, url string, name string) engine.ParseResult {
 
 	profile := model.Profile{}
 
@@ -80,7 +80,14 @@ func ParseProfile(contents []byte, name string) engine.ParseResult {
 		contents, xinzuoRe)
 
 	result := engine.ParseResult{
-		Items: []interface{}{profile},
+		Items: []engine.Item{
+			{
+				Url:     url,
+				Type:    "jiaou",
+				Id:      extractString([]byte(url), idUrlRe),
+				Payload: profile,
+			},
+		},
 	}
 
 	return result
