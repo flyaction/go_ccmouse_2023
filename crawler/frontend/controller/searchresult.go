@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"reflect"
+	"regexp"
 
 	"imooc.com/ccmouse/learngo/crawler/engine"
 
@@ -53,10 +54,15 @@ func (h SearchResultHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 	}
 }
 
+const pageSize = 10
+
 func (h SearchResultHandler) getSearchResult(q string, from int) (model.SearchResult, error) {
 
 	var result model.SearchResult
-	resp, err := h.client.Search("dating_profile").Query(elastic.NewQueryStringQuery(q)).From(from).Do(context.Background())
+
+	result.Query = q
+
+	resp, err := h.client.Search("dating_profile").Query(elastic.NewQueryStringQuery(rewriteQueryString(q))).From(from).Do(context.Background())
 	if err != nil {
 		return result, err
 	}
@@ -66,8 +72,23 @@ func (h SearchResultHandler) getSearchResult(q string, from int) (model.SearchRe
 
 	result.Items = resp.Each(reflect.TypeOf(engine.Item{}))
 
+	if result.Start == 0 {
+		result.PrevFrom = -1
+	} else {
+		result.PrevFrom = (result.Start - 1) / pageSize * pageSize
+	}
+	result.NextFrom =
+		result.Start + len(result.Items)
+
 	log.Printf("+%v", result.Items)
 
 	return result, nil
 
+}
+
+// Rewrites query string. Replaces field names
+// like "Age" to "Payload.Age"
+func rewriteQueryString(q string) string {
+	re := regexp.MustCompile(`([A-Z][a-z]*):`)
+	return re.ReplaceAllString(q, "Payload.$1:")
 }
