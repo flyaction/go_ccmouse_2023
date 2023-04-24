@@ -8,7 +8,7 @@ import (
 
 const cityListRe = `<a href="(http://www.7799520.com/jiaou/[0-9a-z]+)">([^<]+)</a>`
 
-func ParseCityList(contents []byte) engine.ParseResult {
+func ParseCityList(contents []byte, _ string) engine.ParseResult {
 
 	re := regexp.MustCompile(cityListRe)
 

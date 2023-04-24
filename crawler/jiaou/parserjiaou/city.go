@@ -15,7 +15,7 @@ var (
 	cityUrlRe = regexp.MustCompile(`<a target="_blank" href="(http://www.7799520.com/jiaou/shandong/[a-z]+)">([^<]+)</a>`)
 )
 
-func ParseCity(contents []byte) engine.ParseResult {
+func ParseCity(contents []byte, _ string) engine.ParseResult {
 
 	matches := profileRe.FindAllSubmatch(contents, -1)
 
@@ -23,14 +23,10 @@ func ParseCity(contents []byte) engine.ParseResult {
 
 	for _, m := range matches {
 
-		name := string(m[2])
-		url := string(m[1])
 		//result.Items = append(result.Items, "User "+name)
 		result.Requests = append(result.Requests, engine.Request{
-			Url: url,
-			ParserFunc: func(c []byte) engine.ParseResult {
-				return ParseProfile(c, url, name)
-			},
+			Url:        string(m[1]),
+			ParserFunc: ProfileParser(string(m[2])),
 		})
 
 	}

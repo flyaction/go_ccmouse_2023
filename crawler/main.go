@@ -25,10 +25,15 @@ func main() {
 	//	ParserFunc: parserjiaou.ParseCityList,
 	//})
 
+	itemChan, err := persist.ItemSaver()
+	if err != nil {
+		//panic(err)
+	}
+
 	e := engine.ConcurrentEngine{
 		Scheduler:   &scheduler.QueuedScheduler{},
 		WorkerCount: 10,
-		ItemChan:    persist.ItemSaver(),
+		ItemChan:    itemChan,
 	}
 	//e.Run(engine.Request{
 	//	Url:        "https://www.zhenai.com/zhenghun",

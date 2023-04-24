@@ -8,7 +8,7 @@ import (
 func TestParseCityList(t *testing.T) {
 	contents, _ := ioutil.ReadFile("citylist_test_data.html")
 
-	result := ParseCityList(contents)
+	result := ParseCityList(contents, "")
 
 	//fmt.Printf("%s\n", contents)
 
