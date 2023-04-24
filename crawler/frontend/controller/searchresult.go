@@ -2,6 +2,7 @@ package controller
 
 import (
 	"context"
+	"log"
 	"net/http"
 	"reflect"
 
@@ -64,6 +65,8 @@ func (h SearchResultHandler) getSearchResult(q string, from int) (model.SearchRe
 	result.Start = from
 
 	result.Items = resp.Each(reflect.TypeOf(engine.Item{}))
+
+	log.Printf("+%v", result.Items)
 
 	return result, nil
 
