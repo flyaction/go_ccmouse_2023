@@ -77,8 +77,7 @@ func (h SearchResultHandler) getSearchResult(q string, from int) (model.SearchRe
 	} else {
 		result.PrevFrom = (result.Start - 1) / pageSize * pageSize
 	}
-	result.NextFrom =
-		result.Start + len(result.Items)
+	result.NextFrom = result.Start + len(result.Items)
 
 	log.Printf("+%v", result.Items)
 
