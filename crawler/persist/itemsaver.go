@@ -10,7 +10,7 @@ import (
 	"github.com/olivere/elastic/v7"
 )
 
-func ItemSaver() (chan engine.Item, error) {
+func ItemSaver(index string) (chan engine.Item, error) {
 
 	client, err := elastic.NewClient(elastic.SetSniff(false))
 	if err != nil {
@@ -26,7 +26,7 @@ func ItemSaver() (chan engine.Item, error) {
 			log.Printf("Got item #%d: %v", itemCount, item)
 			itemCount++
 
-			err := save(client, item)
+			err := save(client, index, item)
 			if err != nil {
 				log.Printf("Item Saver :error"+"saving item %v %v", item, err)
 				continue
@@ -38,7 +38,7 @@ func ItemSaver() (chan engine.Item, error) {
 
 }
 
-func save(client *elastic.Client, item engine.Item) error {
+func save(client *elastic.Client, index string, item engine.Item) error {
 	//client, err := elastic.NewClient(elastic.SetSniff(false))
 	//if err != nil {
 	//	return err
@@ -48,7 +48,7 @@ func save(client *elastic.Client, item engine.Item) error {
 		return errors.New("must supply Type")
 	}
 
-	indexService := client.Index().Index("dating_profile").Type(item.Type).BodyJson(item)
+	indexService := client.Index().Index(index).Type(item.Type).BodyJson(item)
 
 	if item.Id != "" {
 		indexService.Id(item.Id)

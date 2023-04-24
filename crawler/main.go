@@ -25,7 +25,7 @@ func main() {
 	//	ParserFunc: parserjiaou.ParseCityList,
 	//})
 
-	itemChan, err := persist.ItemSaver()
+	itemChan, err := persist.ItemSaver("dating_profile")
 	if err != nil {
 		//panic(err)
 	}
