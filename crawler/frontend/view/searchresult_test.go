@@ -10,8 +10,7 @@ import (
 )
 
 func TestSearchResultView_Render(t *testing.T) {
-	view := CreateSearchResultView(
-		"template.html")
+	view := CreateSearchResultView("template.html")
 
 	out, err := os.Create("template.test.html")
 	if err != nil {
