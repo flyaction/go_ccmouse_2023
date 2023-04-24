@@ -1,0 +1,15 @@
+package main
+
+import (
+	"net/http"
+
+	"imooc.com/ccmouse/learngo/crawler/frontend/controller"
+)
+
+func main() {
+	http.Handle("/search", controller.CreateSearchResultHandle("crawler/frontend/view/template.html"))
+	err := http.ListenAndServe(":8888", nil)
+	if err != nil {
+		panic(err)
+	}
+}
