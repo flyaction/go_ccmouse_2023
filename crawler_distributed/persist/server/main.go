@@ -1,7 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"log"
+
+	"imooc.com/ccmouse/learngo/crawler_distributed/config"
 
 	"github.com/olivere/elastic/v7"
 	"imooc.com/ccmouse/learngo/crawler_distributed/persist"
@@ -10,7 +13,7 @@ import (
 
 func main() {
 
-	log.Fatal(serveRpc(":1234", "dating_profile"))
+	log.Fatal(serveRpc(fmt.Sprintf(":%d", config.ItemSaverPort), fmt.Sprintf(":%s", config.ElasticIndex)))
 }
 
 func serveRpc(host, index string) error {
