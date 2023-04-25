@@ -1,6 +1,10 @@
 package config
 
 const (
+	ParseCity     = "ParseCity"
+	ParseCityList = "ParseCityList"
+	ParseProfile  = "ParseProfile"
+
 	ItemSaverPort = 1234
 	WorkerPort0   = 9000
 

@@ -30,8 +30,8 @@ func main() {
 	//})
 
 	e.Run(engine.Request{
-		Url:        "https://www.7799520.com/jiaou",
-		ParserFunc: parserjiaou.ParseCityList,
+		Url:    "https://www.7799520.com/jiaou",
+		Parser: engine.NewFuncParser(parserjiaou.ParseCityList, config.ParseCityList),
 	})
 
 }
