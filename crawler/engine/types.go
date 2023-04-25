@@ -8,8 +8,8 @@ type Parser interface {
 }
 
 type Request struct {
-	Url   string
-	Parse Parser
+	Url    string
+	Parser Parser
 }
 
 //type SerializedParser struct {
