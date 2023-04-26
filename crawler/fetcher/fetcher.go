@@ -3,15 +3,19 @@ package fetcher
 import (
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"time"
+
+	"imooc.com/ccmouse/learngo/crawler/config"
 )
 
-var rateLimiter = time.Tick(10 * time.Millisecond)
+var rateLimiter = time.Tick(time.Second / config.Qps)
 
 func Fetch(url string) ([]byte, error) {
 
 	<-rateLimiter
+	log.Printf("Fetching url %s", url)
 
 	resp, err := http.Get(url)
 	if err != nil {

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 
@@ -11,9 +12,16 @@ import (
 	"imooc.com/ccmouse/learngo/crawler_distributed/rpcsupport"
 )
 
-func main() {
+var port = flag.Int("port", 0, "the port for me to listen on")
 
-	log.Fatal(serveRpc(fmt.Sprintf(":%d", config.ItemSaverPort), fmt.Sprintf(":%s", config.ElasticIndex)))
+func main() {
+	flag.Parse()
+	if *port == 0 {
+		fmt.Println("must specify a port")
+		return
+	}
+
+	log.Fatal(serveRpc(fmt.Sprintf(":%d", *port), fmt.Sprintf("%s", config.ElasticIndex)))
 }
 
 func serveRpc(host, index string) error {

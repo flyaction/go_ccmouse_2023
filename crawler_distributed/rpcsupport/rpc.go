@@ -19,6 +19,8 @@ func ServeRpc(host string, service interface{}) error {
 		return err
 	}
 
+	log.Printf("Listen on port :%s", host)
+
 	for {
 		conn, err := listener.Accept()
 		if err != nil {
